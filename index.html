@@ -35,7 +35,6 @@
 </head>
 <body>
   <div id="container">
-    <button id="playButton">这是什么，要不要点一下？</button>
     <canvas id="fireworksCanvas"></canvas>
     <div id="rela">
         <img src="catwithrose.png" alt="Cat with Rose">
@@ -47,9 +46,7 @@
   </audio>
 
   <script>
-    document.getElementById('playButton').addEventListener('click', function() {
-      document.getElementById('myAudio').play();
-    });
+    document.getElementById('myAudio').play();
     
     const canvas = document.getElementById('fireworksCanvas');
     const ctx = canvas.getContext('2d');
