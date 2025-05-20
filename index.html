@@ -8,13 +8,39 @@
       overflow: hidden;
       background-color: black;
     }
+    #container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
     canvas {
       display: block;
+    }
+    #rela {
+      position: absolute;
+      top: 0px;     /* adjust as needed */
+      left: 0px;    /* adjust as needed */
+      width: 150px;  /* optional size */
+      pointer-events: none; /* allows clicks to pass through to canvas */
+      z-index: 1;    /* ensure it stays above the canvas */
+    }
+    img {
+        width: 100px;
+    }
+    #rela div {
+        color: yellow;
     }
   </style>
 </head>
 <body>
-  <canvas id="fireworksCanvas"></canvas>
+  <div id="container">
+    <canvas id="fireworksCanvas"></canvas>
+    <div id="rela">
+        <img src="catwithrose.png" alt="Cat with Rose">
+        <div>今天是520</div>
+    </div>
+  </div>
+
   <script>
     const canvas = document.getElementById('fireworksCanvas');
     const ctx = canvas.getContext('2d');
@@ -31,39 +57,22 @@
       for (let i = 0; i < particleCount; i++) {
         const angle = i * angleStep;
         const speed = Math.random() * 3 + 1;
+
+        let hue;
+        do {
+          hue = Math.random() * 360;
+        } while (hue >= 200 && hue <= 260);
+
         fireworks.push({
           x: x,
           y: y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           alpha: 1,
-          color: `hsl(${Math.random() * 360}, 100%, 50%)`
+          color: `hsl(${hue}, 100%, 50%)`
         });
       }
     }
-    function createFirework(x, y) {
-        const particleCount = 100;
-        const angleStep = (2 * Math.PI) / particleCount;
-        for (let i = 0; i < particleCount; i++) {
-            const angle = i * angleStep;
-            const speed = Math.random() * 3 + 1;
-
-            // Avoid blue hues (200–260°)
-            let hue;
-            do {
-            hue = Math.random() * 360;
-            } while (hue >= 200 && hue <= 260);
-
-            fireworks.push({
-            x: x,
-            y: y,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
-            alpha: 1,
-            color: `hsl(${hue}, 100%, 50%)`
-            });
-        }
-        }
 
     function drawFirework() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -87,14 +96,12 @@
 
     window.addEventListener('resize', resizeCanvas);
 
-    // Mouse support
     canvas.addEventListener('mousemove', (e) => {
       createFirework(e.clientX, e.clientY);
     });
 
-    // Touch support for mobile
     canvas.addEventListener('touchmove', (e) => {
-      e.preventDefault(); // Prevents scrolling while swiping
+      e.preventDefault();
       const touches = e.touches;
       for (let i = 0; i < touches.length; i++) {
         const touch = touches[i];
